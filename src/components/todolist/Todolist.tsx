@@ -12,9 +12,11 @@ type TodolistPropsType = {
 export const Todolist = ({tasks}: TodolistPropsType) => {
     return (
         <div className={style.box}>
-            <h3>Title</h3>
-            <input type="text"/>
-            <button>+</button>
+            <h3 className={style.title}>Title</h3>
+            <div className={style.addItemBlock}>
+                <input type="text" placeholder={'enter text'}/>
+                <button>+</button>
+            </div>
             <ul>
                 {tasks.map(el => <Task key={el.id} id={el.id} title={el.title} isDone={el.isDone}/>)}
             </ul>
