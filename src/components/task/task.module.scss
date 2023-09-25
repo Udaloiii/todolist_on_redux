@@ -1,0 +1,43 @@
+.wrapper {
+  border: 1px solid grey;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  margin: 5px;
+  padding: 5px 0;
+
+  & input {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.text {
+  width: 80%;
+  font-family: Bahnschrift, sans-serif;
+  background-color: grey;
+}
+
+.button {
+  width: 25px;
+  height: 20px;
+  text-align: center;
+  border-radius:5px;
+  border: none;
+  background-color: #427ce7;
+  color: white;
+  margin-right: 5px;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: cornflowerblue;
+  }
+  &:active {
+    transform: scale(0.8);
+    background-color: #427ce7;
+
+
+  }
+}
