@@ -1,0 +1,35 @@
+.formForApp {
+    margin: 25px 0;
+
+    & input {
+        height: 40px !important;
+        width: 30%;
+        border: 1px solid grey;
+        border-radius: 4px;
+        padding: 0 10px;
+        outline: none;
+
+        &:focus {
+            border: 1px solid #427ce7;
+            outline: none;
+        }
+    ;
+    }
+
+    & button {
+        width: 50px !important;
+        background-color: #6d6fff !important;
+        color: white;
+
+        &:active {
+            transform: scale(0.9);
+            transition: 0.3s;
+            color: aquamarine;
+        }
+    }
+}
+
+.box {
+    display: flex;
+    gap: 30px;
+}
