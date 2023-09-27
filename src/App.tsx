@@ -38,12 +38,6 @@ function App() {
         }
     )
 
-    // const [tasks, setTasks] = useState<TasksType[]>([
-    //     {id: v1(), title: 'HTML', isDone: true},
-    //     {id: v1(), title: 'CSS', isDone: true},
-    //     {id: v1(), title: 'JS/TS', isDone: false}
-    // ])
-
 
     // functions for todolists
     function addTodolist(title: string) {
@@ -57,6 +51,10 @@ function App() {
         setTodolists(todolists.filter(el => el.id !== todolistId))
         delete tasks[todolistId]
         setTasks(tasks)
+    }
+
+    function changeFilter(todoId: string, value: FiltersType) {
+        setTodolists(todolists.map(el => el.id === todoId ? {...el, filter: value} : el))
     }
 
 
@@ -79,9 +77,13 @@ function App() {
     }
 
 
-    function changeFilter(todoId: string, value: FiltersType) {
-        setTodolists(todolists.map(el => el.id === todoId ? {...el, filter: value} : el))
+    function changeTitle(todoId: string, newTitle: string) {
+        setTodolists(todolists.map(el => el.id === todoId ? {...el, title: newTitle} : el))
     }
+    function changeText(todoId: string, taskId: string, newTitle: string) {
+        setTasks({...tasks, [todoId]: tasks[todoId].map(el => el.id === taskId ? {...el, title: newTitle} : el)})
+    }
+
 
     const allTodolists = todolists.map(el => {
         let filteredTask = tasks[el.id]
@@ -95,6 +97,8 @@ function App() {
                          changeFilter={changeFilter}
                          filter={el.filter}
                          removeTodolist={removeTodolist}
+                         changeTitle={changeTitle}
+                         changeText={changeText}
         />
     })
     return (
