@@ -9,17 +9,17 @@
   padding: 5px 0;
   transition: 0.3s;
 
-  & input {
+  & .checkBox  {
     width: 18px;
     height: 18px;
   }
 }
 
-.text {
-  width: 80%;
-  font-family: Bahnschrift, sans-serif;
-  background-color: #c9c9c9;
-}
+//.text {
+//  width: 80%;
+//  font-family: Bahnschrift, sans-serif;
+//  background-color: #c9c9c9;
+//}
 
 .button {
   width: 25px;
