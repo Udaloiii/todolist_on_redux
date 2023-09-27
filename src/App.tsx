@@ -3,6 +3,7 @@ import {useState} from "react";
 import {TasksType, Todolist} from "./components/todolist/Todolist.tsx";
 import {AddItemForm} from "./components/addItemForm/AddItemForm.tsx";
 import {v1} from "uuid";
+import {Header} from "./components/header/Header.tsx";
 
 export type FiltersType = "all" | "active" | "completed"
 export type TodolistsType = {
@@ -80,6 +81,7 @@ function App() {
     function changeTitle(todoId: string, newTitle: string) {
         setTodolists(todolists.map(el => el.id === todoId ? {...el, title: newTitle} : el))
     }
+
     function changeText(todoId: string, taskId: string, newTitle: string) {
         setTasks({...tasks, [todoId]: tasks[todoId].map(el => el.id === taskId ? {...el, title: newTitle} : el)})
     }
@@ -103,6 +105,7 @@ function App() {
     })
     return (
         <div>
+            <Header/>
             <AddItemForm className="formForApp" addItem={addTodolist}/>
             <div className="box">
                 {allTodolists}
