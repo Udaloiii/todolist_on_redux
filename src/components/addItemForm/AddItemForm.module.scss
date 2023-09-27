@@ -14,7 +14,8 @@
     &:focus {
       border: 1px solid #427ce7;
       outline: none;
-    };
+    }
+  ;
   }
 
   & button {
@@ -25,11 +26,19 @@
     font-size: x-large;
     background-color: cadetblue;
     color: white;
+    outline: none;
 
+
+    &:focus {
+      border: none;
+      outline: 2px solid #1a499d;
+      transition: 0.1s;
+    }
 
     &:active {
       transform: scale(0.9);
       transition: 0.3s;
+      outline: none;
     }
   }
 }
