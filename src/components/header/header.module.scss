@@ -1,0 +1,55 @@
+.wrapper {
+  // чтобы при прокрутке оставался на месте
+  position: fixed;
+  left: 0;
+  top: 0;
+
+
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  //background-color: #427ce7;
+  background: rgba(75, 119, 206, 0.8);
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.date {
+  color: white;
+  font-family: Castellar, sans-serif;
+  user-select: none;
+}
+
+.time {
+  color: white;
+  font-family: Roboto, sans-serif;
+  user-select: none;
+}
+
+.emptyBox {
+  flex-grow: 1;
+}
+
+.logout {
+  background-color: #1a499d;
+
+  color: #5fafaf;
+  margin-right: 50px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  transition: 0.2s;
+  cursor: pointer;
+  user-select: none;
+
+
+  &:hover {
+    background-color: #2460ce;
+    color: white;
+    transition: 0.2s;
+  }
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
