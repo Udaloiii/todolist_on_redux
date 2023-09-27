@@ -8,8 +8,10 @@
   width: 80% !important;
   height: 40px;
   transition: 0.1s;
-  padding: 0  5px;
+  padding: 0  8px;
   border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
 
   &:focus {
     border: none;
