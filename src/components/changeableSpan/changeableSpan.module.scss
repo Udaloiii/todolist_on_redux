@@ -1,0 +1,19 @@
+.text {
+  width: 80%;
+  font-family: Bahnschrift, sans-serif;
+  background-color: #c9c9c9;
+}
+
+.input {
+  width: 80% !important;
+  height: 40px;
+  transition: 0.1s;
+  padding: 0  5px;
+  border: none;
+
+  &:focus {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+  }
+}
