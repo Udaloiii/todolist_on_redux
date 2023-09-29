@@ -26,6 +26,9 @@
         background-color: #6d6fff !important;
         color: white;
 
+        &:hover {
+            background-color: #9d9efd !important;
+        }
         &:active {
             transform: scale(0.9);
             transition: 0.3s;

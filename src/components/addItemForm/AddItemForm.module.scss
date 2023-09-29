@@ -28,13 +28,6 @@
     color: white;
     outline: none;
 
-
-    &:focus {
-      border: none;
-      outline: 2px solid #1a499d;
-      transition: 0.1s;
-    }
-
     &:active {
       transform: scale(0.9);
       transition: 0.3s;
