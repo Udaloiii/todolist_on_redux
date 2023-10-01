@@ -35,3 +35,12 @@
     }
   }
 }
+
+@media (max-width: 500px) {
+  .wrapper {
+    gap: 10px;
+    & input {
+   width: 65%;
+    }
+  }
+}
