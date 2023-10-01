@@ -18,7 +18,7 @@ body {
   margin: 0;
   /*width: 100vw;*/
   min-height: 100vh;
-  background: url("https://img.freepik.com/free-vector/blue-squares-background_1164-939.jpg?w=1480&t=st=1695842027~exp=1695842627~hmac=5405f934863404d4508c9f8b67cc265279270c220071412e8e2d580990d0e5ae")0 0/auto auto repeat ;
+  background: url("assets/image/background.jpg")0 0/auto auto repeat ;
 }
 
 button {
