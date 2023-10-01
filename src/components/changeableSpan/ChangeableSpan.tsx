@@ -1,4 +1,4 @@
-import {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useState} from "react";
 import style from './changeableSpan.module.scss'
 
 
@@ -8,15 +8,17 @@ type ChangeableSpanProps = {
     className?: string
     setShowButton?: (showDeleteButton: boolean) => void
 }
-export const ChangeableSpan = ({text, changeText, className, setShowButton}: ChangeableSpanProps) => {
+export const ChangeableSpan = React.memo(({text, changeText, className, setShowButton}: ChangeableSpanProps) => {
     const [changeOn, setChangeOn] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(text)
 
     const onChangeText = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
+
     const changeOnHandler = () => {
         setChangeOn(true)
         if (setShowButton) setShowButton(false)
     }
+
     const changeOffHandler = () => {
         if (title.trim() !== '') {
             changeText(title)
@@ -45,7 +47,7 @@ export const ChangeableSpan = ({text, changeText, className, setShowButton}: Cha
         }
     }
 
-
+    console.log('rerender changeable span')
     return (
         changeOn ?
             <input className={`${style.input} ${className}`} type="text" value={title} autoFocus
@@ -54,5 +56,5 @@ export const ChangeableSpan = ({text, changeText, className, setShowButton}: Cha
             : <span className={`${style.text} ${className}`} onDoubleClick={changeOnHandler} onTouchEnd={handleClick}>
                 {text}
         </span>
-    );
-};
+    )
+})

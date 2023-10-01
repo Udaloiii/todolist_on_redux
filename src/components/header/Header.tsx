@@ -1,7 +1,7 @@
 import style from './header.module.scss'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
-export const Header = () => {
+export const Header = React.memo(() => {
     const [data, setData] = useState(new Date())
 
     useEffect(() => {
@@ -19,5 +19,5 @@ export const Header = () => {
             <span className={style.emptyBox}></span>
             <span className={style.logout}>Log out</span>
         </header>
-    );
-};
+    )
+})
