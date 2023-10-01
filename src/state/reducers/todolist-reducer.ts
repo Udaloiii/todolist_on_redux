@@ -1,5 +1,5 @@
-import {FiltersType, TodolistsType} from "src/App.tsx";
 import {v1} from "uuid";
+import {FiltersType, TodolistsType} from "@/App.tsx";
 
 const initialState: TodolistsType[] = []
 
@@ -7,6 +7,7 @@ const initialState: TodolistsType[] = []
 type AddTodolistType = {
     type: 'ADD-TODOLIST'
     title: string
+    todoId: string
 }
 type RemoveTodolistType = {
     type: 'REMOVE-TODOLIST'
@@ -48,7 +49,7 @@ export const todolistReducer = (state = initialState, action: ActionsType) => {
 
 // Action Creators
 export const addTodolistAC = (title: string) => {
-    return {type: 'ADD-TODOLIST', title} as const
+    return {type: 'ADD-TODOLIST', title, todoId: v1()} as const
 }
 export const removeTodolistAC = (todoId: string) => {
     return {type: 'REMOVE-TODOLIST', todoId} as const

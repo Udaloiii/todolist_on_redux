@@ -1,9 +1,10 @@
 import './App.css'
 import {useState} from "react";
-import {TasksType, Todolist} from "./components/todolist/Todolist.tsx";
-import {AddItemForm} from "./components/addItemForm/AddItemForm.tsx";
+import {TasksType, Todolist} from "@/components/todolist/Todolist.tsx";
 import {v1} from "uuid";
-import {Header} from "./components/header/Header.tsx";
+import {Header} from "@/components/header/Header.tsx";
+import {AddItemForm} from "@/components/addItemForm/AddItemForm.tsx";
+
 
 export type FiltersType = "all" | "active" | "completed"
 export type TodolistsType = {
