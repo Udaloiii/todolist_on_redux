@@ -1,9 +1,16 @@
 import './App.css'
-import {useState} from "react";
 import {TasksType, Todolist} from "@/components/todolist/Todolist.tsx";
-import {v1} from "uuid";
 import {Header} from "@/components/header/Header.tsx";
 import {AddItemForm} from "@/components/addItemForm/AddItemForm.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "@/state/state.ts";
+import {
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    removeTodolistAC
+} from "@/state/reducers/todolist-reducer.ts";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "@/state/reducers/task-reducer.ts";
 
 
 export type FiltersType = "all" | "active" | "completed"
@@ -17,74 +24,44 @@ export type TasksForTodolists = {
 }
 
 function App() {
-    const todolistId1 = v1()
-    const todolistId2 = v1()
-
-    const [todolists, setTodolists] = useState<TodolistsType[]>([
-        {id: todolistId1, title: "What to learn", filter: "all"},
-        {id: todolistId2, title: "Movies", filter: "all"}
-    ])
-
-
-    const [tasks, setTasks] = useState<TasksForTodolists>({
-            [todolistId1]: [
-                {id: v1(), title: 'HTML', isDone: true},
-                {id: v1(), title: 'CSS', isDone: true},
-                {id: v1(), title: 'JS/TS', isDone: false}
-            ],
-            [todolistId2]: [
-                {id: v1(), title: 'Hulk', isDone: true},
-                {id: v1(), title: 'Tor', isDone: true},
-                {id: v1(), title: 'Batman', isDone: false}
-            ]
-        }
-    )
-
+    const todolists = useSelector<AppStateType, TodolistsType[]>(state => state.todolists)
+    const tasks = useSelector<AppStateType, TasksForTodolists>(state => state.tasks)
+    const dispatch = useDispatch()
 
     // functions for todolists
     function addTodolist(title: string) {
-        let todoId = v1()
-        let newTodolist: TodolistsType = {id: todoId, title: title, filter: "all"}
-        setTodolists([newTodolist, ...todolists])
-        setTasks({...tasks, [todoId]: []})
+        dispatch(addTodolistAC(title))
     }
 
     function removeTodolist(todolistId: string) {
-        setTodolists(todolists.filter(el => el.id !== todolistId))
-        delete tasks[todolistId]
-        setTasks(tasks)
+        dispatch(removeTodolistAC(todolistId))
     }
 
     function changeFilter(todoId: string, value: FiltersType) {
-        setTodolists(todolists.map(el => el.id === todoId ? {...el, filter: value} : el))
+        dispatch(changeTodolistFilterAC(todoId, value))
     }
 
 
     // functions for tasks
     function addTask(todolistId: string, text: string) {
-        let newTask: TasksType = {id: v1(), title: text, isDone: false}
-        setTasks({...tasks, [todolistId]: [newTask, ...tasks[todolistId],]})
+        dispatch(addTaskAC(todolistId, text))
     }
 
     function removeTask(todolistId: string, taskId: string) {
-        // setTasks(tasks.filter(el => el.id !== taskId))
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(el => el.id !== taskId)})
+        dispatch(removeTaskAC(todolistId, taskId))
     }
 
     function changeTaskStatus(todolistId: string, taskId: string, newValue: boolean) {
-        setTasks({
-            ...tasks,
-            [todolistId]: tasks[todolistId].map(el => el.id === taskId ? {...el, isDone: newValue} : el)
-        })
+        dispatch(changeTaskStatusAC(todolistId, taskId, newValue))
     }
 
 
     function changeTitle(todoId: string, newTitle: string) {
-        setTodolists(todolists.map(el => el.id === todoId ? {...el, title: newTitle} : el))
+        dispatch(changeTodolistTitleAC(todoId, newTitle))
     }
 
     function changeText(todoId: string, taskId: string, newTitle: string) {
-        setTasks({...tasks, [todoId]: tasks[todoId].map(el => el.id === taskId ? {...el, title: newTitle} : el)})
+        dispatch(changeTaskTitleAC(todoId, taskId, newTitle))
     }
 
 
@@ -104,6 +81,7 @@ function App() {
                          changeText={changeText}
         />
     })
+
     return (
         <div>
             <Header/>

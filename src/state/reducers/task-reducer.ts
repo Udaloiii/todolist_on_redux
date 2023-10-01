@@ -46,12 +46,12 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
             return {...state, [action.todoId]: [newTask, ...state[action.todoId]]}
 
         case 'REMOVE-TASK':
-            return {...state, [action.todoId]: state[action.todoId].filter(el => el.id !== action.todoId)}
+            return {...state, [action.todoId]: state[action.todoId].filter(el => el.id !== action.taskId)}
 
         case 'CHANGE-TASK-TITLE':
             return {
                 ...state,
-                [action.todoId]: state[action.todoId].map(el => el.id === action.todoId ? {
+                [action.todoId]: state[action.todoId].map(el => el.id === action.taskId ? {
                     ...el,
                     title: action.newTitle
                 } : el)
@@ -60,7 +60,7 @@ export const taskReducer = (state = initialState, action: ActionsType) => {
         case 'CHANGE-TASK-STATUS':
             return {
                 ...state,
-                [action.todoId]: state[action.todoId].map(el => el.id === action.todoId ? {
+                [action.todoId]: state[action.todoId].map(el => el.id === action.taskId ? {
                     ...el,
                     isDone: action.newValue
                 } : el)
