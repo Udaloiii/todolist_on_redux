@@ -30,11 +30,29 @@ export const ChangeableSpan = ({text, changeText, className, setShowButton}: Cha
         }
     }
 
+    // для отработки события onDoubleClick на мобильной версии
+    const [clicked, setClicked] = useState(false);
+    const handleClick = () => {
+        if (clicked) {
+            changeOnHandler();
+            setClicked(false);
+        } else {
+            setClicked(true);
+
+            setTimeout(() => {
+                setClicked(false);
+            }, 300);
+        }
+    }
+
+
     return (
         changeOn ?
             <input className={`${style.input} ${className}`} type="text" value={title} autoFocus
                    onBlur={changeOffHandler}
                    onChange={onChangeText}/>
-            : <span className={`${style.text} ${className}`} onDoubleClick={changeOnHandler}>{text}</span>
+            : <span className={`${style.text} ${className}`} onDoubleClick={changeOnHandler} onTouchEnd={handleClick}>
+                {text}
+        </span>
     );
 };
