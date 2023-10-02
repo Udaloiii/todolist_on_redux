@@ -1,5 +1,6 @@
 import {v1} from "uuid";
 import {FiltersType, TodolistsType} from "@/App.tsx";
+import {TodolistsFromBack} from "@/api/mainApi.ts";
 
 const initialState: TodolistsType[] = []
 
@@ -24,10 +25,24 @@ type ChangeTodolistFilterType = {
     newValue: FiltersType
 }
 
+export type SetTodolistsType = {
+    type: 'SET-TODOLISTS'
+    todolists: TodolistsFromBack[]
+}
 
-type ActionsType = AddTodolistType | RemoveTodolistType | ChangeTodolistTitleType | ChangeTodolistFilterType
+
+type ActionsType =
+    AddTodolistType
+    | RemoveTodolistType
+    | ChangeTodolistTitleType
+    | ChangeTodolistFilterType
+    | SetTodolistsType
 export const todolistReducer = (state = initialState, action: ActionsType) => {
     switch (action.type) {
+
+        case "SET-TODOLISTS":
+            let copyState = action.todolists
+            return copyState.map(el => ({...el, filter: "all"}))
 
         case "ADD-TODOLIST":
             let newTodolist: TodolistsType = {id: action.todoId, title: action.title, filter: "all"}
@@ -48,6 +63,9 @@ export const todolistReducer = (state = initialState, action: ActionsType) => {
 }
 
 // Action Creators
+export const setTodolistsAC = (todolists: TodolistsFromBack[]) => {
+    return {type: 'SET-TODOLISTS', todolists} as const
+}
 export const addTodolistAC = (title: string) => {
     return {type: 'ADD-TODOLIST', title, todoId: v1()} as const
 }

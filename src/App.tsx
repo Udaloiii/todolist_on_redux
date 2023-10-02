@@ -8,10 +8,12 @@ import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
-    removeTodolistAC
+    removeTodolistAC,
+    setTodolistsAC
 } from "@/state/reducers/todolist-reducer.ts";
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "@/state/reducers/task-reducer.ts";
-import {useCallback} from "react";
+import {useCallback, useEffect} from "react";
+import {todolistApi} from "@/api/mainApi.ts";
 
 
 export type FiltersType = "all" | "active" | "completed"
@@ -67,6 +69,13 @@ function App() {
                          changeText={changeText}
         />
     })
+
+    useEffect(() => {
+        todolistApi.getTodolists()
+            .then(res => {
+                dispatch(setTodolistsAC(res.data))
+            })
+    }, [])
 
     return (
         <div>
