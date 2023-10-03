@@ -24,7 +24,7 @@ export type TaskFromBack = {
     description: string
     title: string
     completed: boolean
-    status: number
+    status: TaskStatuses
     priority: number
     startDate: string
     deadline: string
@@ -39,6 +39,23 @@ export type TasksResponse = {
     totalCount: number
     error: string
 }
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export type UpdateDomainTaskModelType = {
+    title?: string
+    description?: string
+    status?: TaskStatuses
+    priority?: any
+    startDate?: string
+    deadline?: string
+}
+
 
 export const todolistApi = {
     getTodolists() {
@@ -87,10 +104,7 @@ export const taskApi = {
         return instance.put<MainResponseType<{ item: TaskFromBack }>>(`todo-lists/${todolistId}/tasks/${taskId}`, body)
     }
     ,
-    changeTaskStatus(todolistId: string, taskId: string, newValue: boolean) {
-        const body = {
-            isDone: newValue
-        }
-        return instance.put<MainResponseType<{ item: TaskFromBack }>>(`todo-lists/${todolistId}/tasks/${taskId}`, body)
+    updateTask(taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) {
+        return instance.put<MainResponseType<{ item: TaskFromBack }>>(`todo-lists/${todolistId}/tasks/${taskId}`, domainModel)
     }
 }
