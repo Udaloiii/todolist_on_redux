@@ -1,19 +1,19 @@
 import './App.css'
-import {TasksType, Todolist} from "@/components/todolist/Todolist.tsx";
+import {Todolist} from "@/components/todolist/Todolist.tsx";
 import {Header} from "@/components/header/Header.tsx";
 import {AddItemForm} from "@/components/addItemForm/AddItemForm.tsx";
-import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "@/state/state.ts";
+import {useSelector} from "react-redux";
+import {AppStateType, useAppCustomDispatch} from "@/state/state.ts";
 import {
-    addTodolistAC,
+    addTodolistTC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC,
-    removeTodolistAC,
-    setTodolistsAC
+    changeTodolistTitleTC,
+    getTodolistsTC,
+    removeTodolistTC
 } from "@/state/reducers/todolist-reducer.ts";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "@/state/reducers/task-reducer.ts";
+import {addTasksTC, removeTaskTC, updateTaskTC} from "@/state/reducers/task-reducer.ts";
 import {useCallback, useEffect} from "react";
-import {todolistApi} from "@/api/mainApi.ts";
+import {TaskFromBack, TaskStatuses} from "@/api/mainApi.ts";
 
 
 export type FiltersType = "all" | "active" | "completed"
@@ -23,40 +23,38 @@ export type TodolistsType = {
     filter: FiltersType
 }
 export type TasksForTodolists = {
-    [key: string]: TasksType []
+    [key: string]: TaskFromBack[]
 }
 
 function App() {
     const todolists = useSelector<AppStateType, TodolistsType[]>(state => state.todolists)
     const tasks = useSelector<AppStateType, TasksForTodolists>(state => state.tasks)
-    const dispatch = useDispatch()
+    const dispatch = useAppCustomDispatch()
 
     // functions for todolists
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistAC(title))
+        dispatch(addTodolistTC(title))
     }, [dispatch])
 
-    const removeTodolist = useCallback((todolistId: string) => dispatch(removeTodolistAC(todolistId)), [])
-
+    const removeTodolist = useCallback((todolistId: string) => dispatch(removeTodolistTC(todolistId)), [])
     const changeFilter = useCallback((todoId: string, value: FiltersType) => dispatch(changeTodolistFilterAC(todoId, value)), [])
+    const changeTitle = useCallback((todoId: string, newTitle: string) => dispatch(changeTodolistTitleTC(todoId, newTitle)), [])
 
 
     // functions for tasks
-    const addTask = useCallback((todolistId: string, text: string) => dispatch(addTaskAC(todolistId, text)), [])
+    const addTask = useCallback((todolistId: string, text: string) => dispatch(addTasksTC(todolistId, text)), [])
 
-    const removeTask = useCallback((todolistId: string, taskId: string) => dispatch(removeTaskAC(todolistId, taskId)), [])
+    const removeTask = useCallback((todolistId: string, taskId: string) => dispatch(removeTaskTC(todolistId, taskId)), [])
 
-    const changeTaskStatus = useCallback((todolistId: string, taskId: string, newValue: boolean) => dispatch(changeTaskStatusAC(todolistId, taskId, newValue)), [])
+    const changeTaskStatus = useCallback((todolistId: string, taskId: string, status: TaskStatuses) => dispatch(updateTaskTC(taskId, {status}, todolistId)), [])
 
-
-    const changeTitle = useCallback((todoId: string, newTitle: string) => dispatch(changeTodolistTitleAC(todoId, newTitle)), [])
-
-    const changeText = useCallback((todoId: string, taskId: string, newTitle: string) => dispatch(changeTaskTitleAC(todoId, taskId, newTitle)), [])
+    const changeText = useCallback((todoId: string, taskId: string, title: string) => dispatch(updateTaskTC(taskId, {title}, todoId)), [])
 
 
     const allTodolists = todolists.map(el => {
 
-        return <Todolist key={el.id} id={el.id}
+        return <Todolist key={el.id}
+                         id={el.id}
                          title={el.title}
                          tasks={tasks[el.id]}
                          addTask={addTask}
@@ -71,10 +69,7 @@ function App() {
     })
 
     useEffect(() => {
-        todolistApi.getTodolists()
-            .then(res => {
-                dispatch(setTodolistsAC(res.data))
-            })
+        dispatch(getTodolistsTC())
     }, [])
 
     return (
