@@ -3,12 +3,14 @@ import {taskReducer} from "@/state/reducers/task-reducer.ts";
 import {todolistReducer} from "@/state/reducers/todolist-reducer.ts";
 import {useDispatch} from "react-redux";
 import thunkMiddleware, {ThunkDispatch} from "redux-thunk";
+import {appReducer} from "@/state/reducers/app-reducer.ts";
 
 
 // combineReducers - это хелпер функция от Redux, которая позволяет объединить несколько редьюсеров в один редьюсер.
 const mainReducer = combineReducers({
     todolists: todolistReducer,
-    tasks: taskReducer
+    tasks: taskReducer,
+    app: appReducer
 })
 export const store = legacy_createStore(mainReducer, applyMiddleware(thunkMiddleware))
 

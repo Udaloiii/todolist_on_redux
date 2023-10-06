@@ -3,6 +3,7 @@ import {addTodolistAC, removeTodolistAC, SetTodolistsType} from "@/state/reducer
 import {taskApi, TaskFromBack, UpdateTaskType} from "@/api/mainApi.ts";
 import {Dispatch} from "redux";
 import {AppStateType} from "@/state/state.ts";
+import {appStatusAC} from "@/state/reducers/app-reducer.ts";
 
 const initialState: TasksForTodolists = {}
 
@@ -136,8 +137,10 @@ export const updateTaskAC = (taskId: string, model: UpdateTaskType, todolistId: 
 // Thunks
 
 export const getTasksTC = (todoId: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     taskApi.getTasks(todoId)
         .then(res => {
+            dispatch(appStatusAC("idle"))
             dispatch(setTasksAC(todoId, res.data.items))
         })
 }

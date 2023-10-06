@@ -1,6 +1,7 @@
 import {FiltersType, TodolistsType} from "@/App.tsx";
 import {todolistApi, TodolistsFromBack} from "@/api/mainApi.ts";
 import {Dispatch} from "redux";
+import {appStatusAC} from "@/state/reducers/app-reducer.ts";
 
 const initialState: TodolistsType[] = []
 
@@ -82,9 +83,11 @@ export const changeTodolistFilterAC = (todoId: string, newValue: FiltersType) =>
 // Thunks
 
 export const getTodolistsTC = () => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     todolistApi.getTodolists()
         .then(res => {
             dispatch(setTodolistsAC(res.data))
+            dispatch(appStatusAC("idle"))
         })
 }
 export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
