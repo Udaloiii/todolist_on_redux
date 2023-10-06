@@ -61,6 +61,12 @@
 
 }
 
+.wrapperForLoader {
+    margin-top: -60px;
+    display: flex;
+    justify-content: center;
+}
+
 @media (max-width: 1200px) {
     .box {
         grid-template-columns: repeat(3, 1fr);

@@ -14,7 +14,8 @@ import {
 import {addTasksTC, removeTaskTC, updateTaskTC} from "@/state/reducers/task-reducer.ts";
 import {useCallback, useEffect} from "react";
 import {TaskFromBack, TaskStatuses} from "@/api/mainApi.ts";
-import {Loader} from "@/components/loader/Loader.tsx";
+import {AppStatusType} from "@/state/reducers/app-reducer.ts";
+import {NewLoader} from "@/components/newLoader/NewLoader.tsx";
 
 
 export type FiltersType = "all" | "active" | "completed"
@@ -30,6 +31,7 @@ export type TasksForTodolists = {
 function App() {
     const todolists = useSelector<AppStateType, TodolistsType[]>(state => state.todolists)
     const tasks = useSelector<AppStateType, TasksForTodolists>(state => state.tasks)
+    const status = useSelector<AppStateType, AppStatusType>(state => state.app.status)
     const dispatch = useAppCustomDispatch()
 
     // functions for todolists
@@ -76,8 +78,9 @@ function App() {
     return (
         <div>
             <Header/>
-            <Loader/>
             <AddItemForm className="formForApp" addItem={addTodolist}/>
+            {/*<div className="wrapperForLoader"><NewLoader/></div>*/}
+            {status === 'loading' && <div className="wrapperForLoader"><NewLoader/></div>}
             <div className="box">
                 {allTodolists}
             </div>
