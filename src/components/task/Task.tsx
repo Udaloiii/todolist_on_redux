@@ -25,7 +25,7 @@ export const Task = React.memo(({
         changeTaskStatus(todoId, id, checked ? TaskStatuses.Completed : TaskStatuses.New)
     }, [todoId, id])
     const removeTaskHandler = useCallback(() => removeTask(todoId, id), [todoId, id])
-    const changeTextHandler = useCallback(() => changeText, [])
+    const changeTextHandler = useCallback((newTitle: string) => changeText(newTitle), [])
     const isDoneStyle = isDone ? style.isDone : ''
 
     return (
