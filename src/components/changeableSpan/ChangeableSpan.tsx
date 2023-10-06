@@ -47,7 +47,6 @@ export const ChangeableSpan = React.memo(({text, changeText, className, setShowB
         }
     }
 
-    console.log('rerender changeable span')
     return (
         changeOn ?
             <input className={`${style.input} ${className}`} type="text" value={title} autoFocus

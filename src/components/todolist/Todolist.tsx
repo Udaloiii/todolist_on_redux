@@ -50,7 +50,6 @@ export const Todolist = React.memo(({
 
     const [showDeleteButton, setShowDeleteButton] = useState(true) // чтобы значок "удалить" убрать, когда включается input
 
-    console.log('rerender')
 
     let filteredTask = tasks
     if (filter === "active") {

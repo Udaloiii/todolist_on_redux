@@ -1,23 +1,14 @@
 import style from './header.module.scss'
-import React, {useEffect, useState} from "react";
+import React from "react";
+import {Time} from "@/components/header/time/Time.tsx";
 
 export const Header = React.memo(() => {
-    const [data, setData] = useState(new Date())
-
-    useEffect(() => {
-        setTimeout(() => {
-            setData(new Date())
-        }, 1000)
-    }, [data])
-
-    const finalTime = `${('0' + data.getHours()).slice(-2)}:${('0' + data.getMinutes()).slice(-2)}:${('0' + data.getSeconds()).slice(-2)}`
-    const finalDate = data.toLocaleDateString('ru-Ru')
     return (
         <header className={style.wrapper}>
-            <span className={style.date}>{finalDate}</span>
-            <span className={style.time}>{finalTime}</span>
+            <Time/>
             <span className={style.emptyBox}></span>
             <span className={style.logout}>Log out</span>
         </header>
     )
 })
+
