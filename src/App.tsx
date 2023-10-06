@@ -14,6 +14,7 @@ import {
 import {addTasksTC, removeTaskTC, updateTaskTC} from "@/state/reducers/task-reducer.ts";
 import {useCallback, useEffect} from "react";
 import {TaskFromBack, TaskStatuses} from "@/api/mainApi.ts";
+import {Loader} from "@/components/loader/Loader.tsx";
 
 
 export type FiltersType = "all" | "active" | "completed"
@@ -75,6 +76,7 @@ function App() {
     return (
         <div>
             <Header/>
+            <Loader/>
             <AddItemForm className="formForApp" addItem={addTodolist}/>
             <div className="box">
                 {allTodolists}
