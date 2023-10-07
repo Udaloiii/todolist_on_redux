@@ -13,16 +13,16 @@ import {
 } from "@/state/reducers/todolist-reducer.ts";
 import {addTasksTC, removeTaskTC, updateTaskTC} from "@/state/reducers/task-reducer.ts";
 import {useCallback, useEffect} from "react";
-import {TaskFromBack, TaskStatuses} from "@/api/mainApi.ts";
+import {TaskFromBack, TaskStatuses, TodolistsFromBack} from "@/api/mainApi.ts";
 import {AppStatusType} from "@/state/reducers/app-reducer.ts";
 import {NewLoader} from "@/components/newLoader/NewLoader.tsx";
+import {Snackbar} from "@/components/snackbar/Snackbar.tsx";
 
 
 export type FiltersType = "all" | "active" | "completed"
-export type TodolistsType = {
-    id: string
-    title: string
+export type TodolistsType = TodolistsFromBack & {
     filter: FiltersType
+    todolistStatus: AppStatusType
 }
 export type TasksForTodolists = {
     [key: string]: TaskFromBack[]
@@ -59,6 +59,7 @@ function App() {
         return <Todolist key={el.id}
                          id={el.id}
                          title={el.title}
+                         status={el.todolistStatus}
                          tasks={tasks[el.id]}
                          addTask={addTask}
                          removeTask={removeTask}
@@ -84,6 +85,7 @@ function App() {
             <div className="box">
                 {allTodolists}
             </div>
+            <Snackbar/>
         </div>
     )
 }
