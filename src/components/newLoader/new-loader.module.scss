@@ -269,3 +269,16 @@
     opacity: 1;
   }
 }
+
+@media  screen and (max-width: 768px) {
+  .circle {
+    position: relative;
+    left: -100px;
+    width: 0;
+    height: 0;
+    border: 45px solid #FDD835;
+    border-radius: 50%;
+    border-right-color: transparent;
+    animation: move 5s linear 0s infinite normal forwards;
+  }
+}
