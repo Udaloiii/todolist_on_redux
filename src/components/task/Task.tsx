@@ -10,6 +10,7 @@ type TasksPropsType = TasksType & {
     removeTask: (todoId: string, taskId: string) => void
     changeTaskStatus: (todoId: string, id: string, status: TaskStatuses) => void
     changeText: (newTitle: string) => void
+    todoDisabled: boolean
 }
 export const Task = React.memo(({
                                     id,
@@ -18,7 +19,8 @@ export const Task = React.memo(({
                                     title,
                                     removeTask,
                                     changeTaskStatus,
-                                    changeText
+                                    changeText,
+                                    todoDisabled
                                 }: TasksPropsType) => {
     const changeTaskStatusHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const checked = e.currentTarget.checked
@@ -30,9 +32,9 @@ export const Task = React.memo(({
 
     return (
         <li className={`${style.wrapper} ${isDoneStyle}`} key={id}>
-            <input className={style.checkBox} type="checkbox" checked={isDone} onChange={changeTaskStatusHandler}/>
+            <input className={style.checkBox} type="checkbox" checked={isDone} onChange={changeTaskStatusHandler} disabled={todoDisabled}/>
             <ChangeableSpan text={title} changeText={changeTextHandler}/>
-            <button className={style.button} onClick={removeTaskHandler}>x</button>
+            <button className={style.button} onClick={removeTaskHandler} disabled={todoDisabled}>x</button>
         </li>
     )
 })

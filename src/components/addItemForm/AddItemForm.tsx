@@ -4,8 +4,9 @@ import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 type AddItemFormProps = {
     className?: string
     addItem: (text: string) => void
+    todoDisabled?: boolean
 }
-export const AddItemForm = React.memo(({className, addItem}: AddItemFormProps) => {
+export const AddItemForm = React.memo(({className, addItem, todoDisabled}: AddItemFormProps) => {
         const [text, setText] = useState<string>("")
 
         const onChangeTextHandler = (e: ChangeEvent<HTMLInputElement>) => setText(e.currentTarget.value)
@@ -25,8 +26,8 @@ export const AddItemForm = React.memo(({className, addItem}: AddItemFormProps) =
         return (
             <div className={`${style.wrapper} ${className}`}>
                 <input type="text" placeholder={'enter text'} value={text} onChange={onChangeTextHandler}
-                       onKeyDown={onEnterPress}/>
-                <button onClick={addItemHandler}>+</button>
+                       onKeyDown={onEnterPress} disabled={todoDisabled}/>
+                <button onClick={addItemHandler} disabled={todoDisabled}>+</button>
             </div>
         );
     }

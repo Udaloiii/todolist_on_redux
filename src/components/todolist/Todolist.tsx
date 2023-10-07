@@ -7,6 +7,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {getTasksTC} from "@/state/reducers/task-reducer.ts";
 import {useAppCustomDispatch} from "@/state/state.ts";
 import {TaskFromBack, TaskStatuses} from "@/api/mainApi.ts";
+import {AppStatusType} from "@/state/reducers/app-reducer.ts";
 
 export type TasksType = {
     id: string
@@ -16,6 +17,7 @@ export type TasksType = {
 type TodolistPropsType = {
     id: string
     title: string
+    status: AppStatusType
     tasks: TaskFromBack[]
     addTask: (todolistId: string, text: string) => void
     removeTask: (todolistId: string, taskId: string) => void
@@ -28,6 +30,7 @@ type TodolistPropsType = {
 }
 export const Todolist = React.memo(({
                                         id,
+                                        status,
                                         tasks,
                                         title,
                                         addTask,
@@ -62,6 +65,9 @@ export const Todolist = React.memo(({
     useEffect(() => {
         dispatch(getTasksTC(id))
     }, [])
+
+    const todoDisabled = status === "loading"
+
     return (
         <div className={style.box}>
             <h3 className={style.changeableSpanBox}>
@@ -71,14 +77,14 @@ export const Todolist = React.memo(({
                     <button className={style.changeableSpanButton} onClick={removeTodolistHandler}>x</button>}
 
             </h3>
-            <AddItemForm addItem={addTaskHandler}/>
+            <AddItemForm addItem={addTaskHandler} todoDisabled = {todoDisabled}/>
             <ul>
                 {filteredTask?.map(el => {
                     const changeTextHandler = (newTitle: string) => changeText(id, el.id, newTitle)
                     return (
                         <Task key={el.id} id={el.id} todoId={id} title={el.title} isDone={el.status === 2}
                               removeTask={removeTask} changeTaskStatus={changeTaskStatus}
-                              changeText={changeTextHandler}/>
+                              changeText={changeTextHandler} todoDisabled={todoDisabled}/>
                     )
                 })}
             </ul>
