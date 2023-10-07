@@ -3,7 +3,7 @@ import {addTodolistAC, removeTodolistAC, SetTodolistsType} from "@/state/reducer
 import {taskApi, TaskFromBack, UpdateTaskType} from "@/api/mainApi.ts";
 import {Dispatch} from "redux";
 import {AppStateType} from "@/state/state.ts";
-import {appStatusAC} from "@/state/reducers/app-reducer.ts";
+import {appErrorAC, appStatusAC} from "@/state/reducers/app-reducer.ts";
 
 const initialState: TasksForTodolists = {}
 
@@ -146,15 +146,29 @@ export const getTasksTC = (todoId: string) => (dispatch: Dispatch) => {
 }
 
 export const addTasksTC = (todoId: string, title: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     taskApi.addTask(todoId, title)
         .then(res => {
-            dispatch(addTaskAC(res.data.data.item))
+            if (res.data.resultCode === 0) {
+                dispatch(appStatusAC("idle"))
+                dispatch(addTaskAC(res.data.data.item))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(appErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(appErrorAC("Some error"))
+                }
+                dispatch(appStatusAC("failed"))
+            }
+
         })
 }
 
 export const removeTaskTC = (todoId: string, taskId: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     taskApi.removeTask(todoId, taskId)
         .then(() => {
+            dispatch(appStatusAC("idle"))
             dispatch(removeTaskAC(todoId, taskId))
         })
 }
@@ -178,10 +192,12 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateTaskType, todoli
             ...domainModel
         }
 
+        dispatch(appStatusAC("loading"))
         taskApi.updateTask(taskId, apiModel, todolistId)
             .then(() => {
                 dispatch(updateTaskAC(taskId, domainModel, todolistId))
+                dispatch(appStatusAC("idle"))
             })
     }
 
-type ThunkDispatch = Dispatch<ActionsType>
+type ThunkDispatch = Dispatch<ActionsType | ReturnType<typeof appStatusAC>>

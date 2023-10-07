@@ -1,7 +1,7 @@
 import {FiltersType, TodolistsType} from "@/App.tsx";
 import {todolistApi, TodolistsFromBack} from "@/api/mainApi.ts";
 import {Dispatch} from "redux";
-import {appStatusAC} from "@/state/reducers/app-reducer.ts";
+import {appErrorAC, appStatusAC, AppStatusType} from "@/state/reducers/app-reducer.ts";
 
 const initialState: TodolistsType[] = []
 
@@ -37,15 +37,16 @@ type ActionsType =
     | ChangeTodolistTitleType
     | ChangeTodolistFilterType
     | SetTodolistsType
-export const todolistReducer = (state = initialState, action: ActionsType):TodolistsType[] => {
+    | ReturnType<typeof changeTodolistStatusAC>
+export const todolistReducer = (state = initialState, action: ActionsType): TodolistsType[] => {
     switch (action.type) {
 
         case "SET-TODOLISTS":
             let copyState = action.todolists
-            return copyState.map(el => ({...el, filter: "all"}))
+            return copyState.map(el => ({...el, filter: "all", todolistStatus: "idle"}))
 
         case "ADD-TODOLIST":
-            let newTodolist: TodolistsType = {...action.todolist, filter: "all"}
+            let newTodolist: TodolistsType = {...action.todolist, filter: "all", todolistStatus: "idle"}
             return [newTodolist, ...state]
 
         case "REMOVE-TODOLIST":
@@ -56,6 +57,9 @@ export const todolistReducer = (state = initialState, action: ActionsType):Todol
 
         case "CHANGE-TODOLIST-FILTER":
             return state.map(el => el.id === action.todoId ? {...el, filter: action.newValue} : el)
+
+        case "CHANGE-TODOLIST-STATUS":
+            return state.map(el => el.id === action.todoId ? {...el, todolistStatus: action.status} : el)
 
         default:
             return state
@@ -79,6 +83,10 @@ export const changeTodolistFilterAC = (todoId: string, newValue: FiltersType) =>
     return {type: 'CHANGE-TODOLIST-FILTER', todoId, newValue} as const
 }
 
+export const changeTodolistStatusAC = (todoId: string, status: AppStatusType) => {
+    return {type: 'CHANGE-TODOLIST-STATUS', todoId, status} as const
+}
+
 
 // Thunks
 
@@ -91,20 +99,45 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
         })
 }
 export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     todolistApi.addTodolist(title)
         .then(res => {
-            dispatch(addTodolistAC(res.data.data.item))
+            if (res.data.resultCode === 0) {
+                dispatch(appStatusAC("idle"))
+                dispatch(addTodolistAC(res.data.data.item))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(appErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(appErrorAC("Some error"))
+                }
+                dispatch(appStatusAC("failed"))
+            }
         })
 }
 export const removeTodolistTC = (todoId: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
+    dispatch(changeTodolistStatusAC(todoId, "loading"))
     todolistApi.removeTodolist(todoId)
         .then(() => {
+            dispatch(appStatusAC("idle"))
             dispatch(removeTodolistAC(todoId))
         })
 }
 export const changeTodolistTitleTC = (todoId: string, newTitle: string) => (dispatch: Dispatch) => {
+    dispatch(appStatusAC("loading"))
     todolistApi.changeTodolistTitle(todoId, newTitle)
-        .then(() => {
-            dispatch(changeTodolistTitleAC(todoId, newTitle))
+        .then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(appStatusAC("idle"))
+                dispatch(changeTodolistTitleAC(todoId, newTitle))
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(appErrorAC(res.data.messages[0]))
+                } else {
+                    dispatch(appErrorAC("Some error"))
+                }
+                dispatch(appStatusAC("failed"))
+            }
         })
 }
