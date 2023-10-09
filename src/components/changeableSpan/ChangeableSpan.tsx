@@ -7,16 +7,27 @@ type ChangeableSpanProps = {
     changeText: (newTitle: string) => void
     className?: string
     setShowButton?: (showDeleteButton: boolean) => void
+    todoDisabled?: boolean
+    taskDisabled?: boolean
 }
-export const ChangeableSpan = React.memo(({text, changeText, className, setShowButton}: ChangeableSpanProps) => {
+export const ChangeableSpan = React.memo(({
+                                              text,
+                                              changeText,
+                                              className,
+                                              setShowButton,
+                                              todoDisabled,
+                                              taskDisabled
+                                          }: ChangeableSpanProps) => {
     const [changeOn, setChangeOn] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(text)
 
     const onChangeText = (e: ChangeEvent<HTMLInputElement>) => setTitle(e.currentTarget.value)
 
     const changeOnHandler = () => {
-        setChangeOn(true)
-        if (setShowButton) setShowButton(false)
+        if (!todoDisabled && !taskDisabled) {
+            setChangeOn(true)
+            if (setShowButton) setShowButton(false)
+        }
     }
 
     const changeOffHandler = () => {
@@ -47,12 +58,14 @@ export const ChangeableSpan = React.memo(({text, changeText, className, setShowB
         }
     }
 
+    const disableStyle = todoDisabled || taskDisabled ? style.disabled : ""
     return (
         changeOn ?
             <input className={`${style.input} ${className}`} type="text" value={title} autoFocus
                    onBlur={changeOffHandler}
                    onChange={onChangeText}/>
-            : <span className={`${style.text} ${className}`} onDoubleClick={changeOnHandler} onTouchEnd={handleClick}>
+            : <span className={`${style.text} ${className} ${disableStyle}`} onDoubleClick={changeOnHandler}
+                    onTouchEnd={handleClick}>
                 {text}
         </span>
     )
