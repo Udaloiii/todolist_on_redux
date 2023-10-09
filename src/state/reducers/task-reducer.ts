@@ -3,7 +3,9 @@ import {addTodolistAC, removeTodolistAC, SetTodolistsType} from "@/state/reducer
 import {taskApi, TaskFromBack, UpdateTaskType} from "@/api/mainApi.ts";
 import {Dispatch} from "redux";
 import {AppStateType} from "@/state/state.ts";
-import {appErrorAC, appStatusAC} from "@/state/reducers/app-reducer.ts";
+import {appErrorAC, appStatusAC, AppStatusType} from "@/state/reducers/app-reducer.ts";
+import {handleAppError} from "@/utils/handleAppError.ts";
+import {handleServerError} from "@/utils/handleServerError.ts";
 
 const initialState: TasksForTodolists = {}
 
@@ -48,6 +50,7 @@ type ActionsType =
     | SetTodolistsType
     | SetTasksType
     | ReturnType<typeof updateTaskAC>
+    | ReturnType<typeof updateTaskStatusAC>
 export const taskReducer = (state = initialState, action: ActionsType): TasksForTodolists => {
     switch (action.type) {
         case "SET-TODOLISTS":
@@ -58,10 +61,13 @@ export const taskReducer = (state = initialState, action: ActionsType): TasksFor
             return copyState
 
         case "SET-TASKS":
-            return {...state, [action.todoId]: action.tasks}
+            return {...state, [action.todoId]: action.tasks.map(el => ({...el, statusTask: "idle"}))}
 
         case 'ADD-TASK':
-            return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
+            return {
+                ...state,
+                [action.task.todoListId]: [{...action.task, statusTask: "idle"}, ...state[action.task.todoListId]]
+            }
 
         case 'REMOVE-TASK':
             return {...state, [action.todoId]: state[action.todoId].filter(el => el.id !== action.taskId)}
@@ -100,6 +106,11 @@ export const taskReducer = (state = initialState, action: ActionsType): TasksFor
             delete copyState[action.todoId]
             return copyState
         }
+        case "UPDATE-TASK-STATUS":
+            return {
+                ...state, [action.todolistId]: state[action.todolistId]
+                    .map(t => t.id === action.taskId ? {...t, statusTask: action.status} : t)
+            }
 
         default:
             return state
@@ -121,18 +132,21 @@ export const removeTaskAC = (todoId: string, taskId: string) => {
     return {type: 'REMOVE-TASK', todoId, taskId} as const
 }
 
-export const changeTaskTitleAC = (todoId: string, taskId: string, newTitle: string) => {
-    return {type: 'CHANGE-TASK-TITLE', todoId, taskId, newTitle} as const
-}
-
-export const changeTaskStatusAC = (todoId: string, taskId: string, newValue: boolean) => {
-    return {type: 'CHANGE-TASK-STATUS', todoId, taskId, newValue} as const
-}
+// export const changeTaskTitleAC = (todoId: string, taskId: string, newTitle: string) => {
+//     return {type: 'CHANGE-TASK-TITLE', todoId, taskId, newTitle} as const
+// }
+//
+// export const changeTaskStatusAC = (todoId: string, taskId: string, newValue: boolean) => {
+//     return {type: 'CHANGE-TASK-STATUS', todoId, taskId, newValue} as const
+// }
 
 export const updateTaskAC = (taskId: string, model: UpdateTaskType, todolistId: string) => {
     return {type: 'UPDATE-TASK', model, todolistId, taskId} as const
 }
 
+export const updateTaskStatusAC = (todolistId: string, taskId: string, status: AppStatusType) => {
+    return {type: 'UPDATE-TASK-STATUS', todolistId, taskId, status} as const
+}
 
 // Thunks
 
@@ -142,6 +156,9 @@ export const getTasksTC = (todoId: string) => (dispatch: Dispatch) => {
         .then(res => {
             dispatch(appStatusAC("idle"))
             dispatch(setTasksAC(todoId, res.data.items))
+        })
+        .catch(err => {
+            handleServerError(err, dispatch)
         })
 }
 
@@ -153,23 +170,30 @@ export const addTasksTC = (todoId: string, title: string) => (dispatch: Dispatch
                 dispatch(appStatusAC("idle"))
                 dispatch(addTaskAC(res.data.data.item))
             } else {
-                if (res.data.messages.length) {
-                    dispatch(appErrorAC(res.data.messages[0]))
-                } else {
-                    dispatch(appErrorAC("Some error"))
-                }
-                dispatch(appStatusAC("failed"))
+                handleAppError(res.data, dispatch)
             }
 
+        })
+        .catch(err => {
+            handleServerError(err, dispatch)
         })
 }
 
 export const removeTaskTC = (todoId: string, taskId: string) => (dispatch: Dispatch) => {
     dispatch(appStatusAC("loading"))
+    dispatch(updateTaskStatusAC(todoId, taskId, "loading"))
     taskApi.removeTask(todoId, taskId)
-        .then(() => {
-            dispatch(appStatusAC("idle"))
-            dispatch(removeTaskAC(todoId, taskId))
+        .then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(appStatusAC("idle"))
+                dispatch(removeTaskAC(todoId, taskId))
+            } else {
+                handleAppError(res.data, dispatch)
+            }
+        })
+        .catch(err => {
+            dispatch(updateTaskStatusAC(todoId, taskId, "failed"))
+            handleServerError(err, dispatch)
         })
 }
 
@@ -194,10 +218,17 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateTaskType, todoli
 
         dispatch(appStatusAC("loading"))
         taskApi.updateTask(taskId, apiModel, todolistId)
-            .then(() => {
-                dispatch(updateTaskAC(taskId, domainModel, todolistId))
-                dispatch(appStatusAC("idle"))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(updateTaskAC(taskId, domainModel, todolistId))
+                    dispatch(appStatusAC("idle"))
+                } else {
+                    handleAppError(res.data, dispatch)
+                }
+            })
+            .catch(err => {
+                handleServerError(err, dispatch)
             })
     }
 
-type ThunkDispatch = Dispatch<ActionsType | ReturnType<typeof appStatusAC>>
+type ThunkDispatch = Dispatch<ActionsType | ReturnType<typeof appStatusAC> | ReturnType<typeof appErrorAC>>
