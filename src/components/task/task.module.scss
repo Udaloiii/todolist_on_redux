@@ -13,13 +13,12 @@
     width: 18px;
     height: 18px;
   }
-}
 
-//.text {
-//  width: 80%;
-//  font-family: Bahnschrift, sans-serif;
-//  background-color: #c9c9c9;
-//}
+  & .disabled {
+    opacity: 0.5;
+    user-select: none;
+  }
+}
 
 .button {
   width: 25px;
@@ -37,6 +36,11 @@
   }
   &:active {
     transform: scale(0.8);
+    background-color: #427ce7;
+  }
+  &:disabled {
+    opacity: 0.5;
+    transform: none;
     background-color: #427ce7;
   }
 }
