@@ -25,7 +25,7 @@ export type TodolistsType = TodolistsFromBack & {
     todolistStatus: AppStatusType
 }
 export type TasksForTodolists = {
-    [key: string]: TaskFromBack[]
+    [key: string]: Array<TaskFromBack & {statusTask: AppStatusType}>
 }
 
 function App() {
