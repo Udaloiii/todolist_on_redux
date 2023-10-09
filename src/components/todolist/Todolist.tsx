@@ -18,7 +18,7 @@ type TodolistPropsType = {
     id: string
     title: string
     status: AppStatusType
-    tasks: TaskFromBack[]
+    tasks: Array<TaskFromBack & { statusTask: AppStatusType }>
     addTask: (todolistId: string, text: string) => void
     removeTask: (todolistId: string, taskId: string) => void
     changeTaskStatus: (todolistId: string, id: string, status: TaskStatuses) => void
@@ -59,7 +59,7 @@ export const Todolist = React.memo(({
         filteredTask = tasks.filter(el => el.status !== TaskStatuses.Completed)
     }
     if (filter === "completed") {
-        filteredTask = tasks.filter(el => el.status !== TaskStatuses.Completed)
+        filteredTask = tasks.filter(el => el.status === TaskStatuses.Completed)
     }
 
     useEffect(() => {
@@ -70,24 +70,26 @@ export const Todolist = React.memo(({
 
     return (
         <div className={style.box}>
-            <h3 className={style.changeableSpanBox}>
-                <ChangeableSpan className={style.title} text={title} changeText={changeTitleHandler}
-                                setShowButton={setShowDeleteButton}/>
-                {showDeleteButton &&
-                    <button className={style.changeableSpanButton} onClick={removeTodolistHandler}>x</button>}
+            <div className={style.main}>
+                <h3 className={style.changeableSpanBox}>
+                    <ChangeableSpan className={style.title} text={title} changeText={changeTitleHandler}
+                                    setShowButton={setShowDeleteButton} todoDisabled={todoDisabled}/>
+                    {showDeleteButton &&
+                        <button className={style.changeableSpanButton} onClick={removeTodolistHandler}>x</button>}
 
-            </h3>
-            <AddItemForm addItem={addTaskHandler} todoDisabled = {todoDisabled}/>
-            <ul>
-                {filteredTask?.map(el => {
-                    const changeTextHandler = (newTitle: string) => changeText(id, el.id, newTitle)
-                    return (
-                        <Task key={el.id} id={el.id} todoId={id} title={el.title} isDone={el.status === 2}
-                              removeTask={removeTask} changeTaskStatus={changeTaskStatus}
-                              changeText={changeTextHandler} todoDisabled={todoDisabled}/>
-                    )
-                })}
-            </ul>
+                </h3>
+                <AddItemForm addItem={addTaskHandler} todoDisabled={todoDisabled}/>
+                <ul>
+                    {filteredTask?.map(el => {
+                        const changeTextHandler = (newTitle: string) => changeText(id, el.id, newTitle)
+                        return (
+                            <Task key={el.id} id={el.id} todoId={id} title={el.title} isDone={el.status === 2}
+                                  removeTask={removeTask} changeTaskStatus={changeTaskStatus}
+                                  changeText={changeTextHandler} todoDisabled={todoDisabled} taskStatus = {el.statusTask}/>
+                        )
+                    })}
+                </ul>
+            </div>
             <div className={style.buttonsBlock}>
                 <button className={`${style.button} ${filter === 'all' && style.activeButton}`}
                         onClick={() => changeFilterHandler('all')}>All
