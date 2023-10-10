@@ -1,4 +1,5 @@
 import axios from "axios";
+import {FormikValuesType} from "@/components/login/Login.tsx";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -105,6 +106,20 @@ export const taskApi = {
     // }
     // ,
     updateTask(taskId: string, domainModel: UpdateTaskType, todolistId: string) {
-        return instance.put<MainResponseType<{ item: TaskFromBack }>>(`todo-lists/${todolistId}/tasks/${taskId}`, domainModel)
+        return instance.put<MainResponseType<{
+            item: TaskFromBack
+        }>>(`todo-lists/${todolistId}/tasks/${taskId}`, domainModel)
+    }
+}
+
+export const authApi = {
+    authMe() {
+        return instance.get('auth/me')
+    },
+    logIn(authData: FormikValuesType) {
+        return instance.post<MainResponseType<{ userId: number }>>('auth/login', authData)
+    },
+    logOut() {
+        return instance.delete<MainResponseType>('auth/login')
     }
 }
