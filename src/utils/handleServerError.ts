@@ -6,4 +6,4 @@ export const handleServerError = (error: { message: string }, dispatch: Dispatch
     dispatch(appErrorAC(error.message))
 }
 
-type ErrorDispatchType =  ReturnType<typeof appStatusAC> | ReturnType<typeof appErrorAC>
+export type ErrorDispatchType =  ReturnType<typeof appStatusAC> | ReturnType<typeof appErrorAC>
