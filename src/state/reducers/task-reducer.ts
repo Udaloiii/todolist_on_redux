@@ -91,7 +91,6 @@ export const taskReducer = (state = initialState, action: ActionsType): TasksFor
         //     }
 
         case 'UPDATE-TASK':
-            console.log('update-task')
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId]

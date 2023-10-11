@@ -41,9 +41,10 @@ export const TodolistsBox = () => {
     const changeText = useCallback((todoId: string, taskId: string, title: string) => dispatch(updateTaskTC(taskId, {title}, todoId)), [])
 
     useEffect(() => {
-        if(isLoggedIn) {
-            dispatch(getTodolistsTC())
+        if (!isLoggedIn) {
+            return
         }
+        dispatch(getTodolistsTC())
     }, [])
 
     if (!isLoggedIn) {
