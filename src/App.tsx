@@ -8,10 +8,10 @@ import {AppStatusType} from "@/state/reducers/app-reducer.ts";
 import {NewLoader} from "@/components/newLoader/NewLoader.tsx";
 import {Snackbar} from "@/components/snackbar/Snackbar.tsx";
 import {Login} from "@/components/login/Login.tsx";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {TodolistsBox} from "@/components/todolistsBox/TodolistsBox.tsx";
 import {authMeTC} from "@/state/reducers/auth-reducer.ts";
-
+import {ErrorPage} from "@/components/errorPage/ErrorPage.tsx";
 
 export type FiltersType = "all" | "active" | "completed"
 export type TodolistsType = TodolistsFromBack & {
@@ -43,6 +43,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<TodolistsBox/>}/>
                 <Route path="/login" element={<Login/>}/>
+                <Route path="/404" element={<ErrorPage/>}/>
+                <Route path={"*"} element={<Navigate to={"/404"}/>}/>
             </Routes>
         </div>
     )
