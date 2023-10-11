@@ -1,5 +1,6 @@
 .wrapper {
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: 20px;
   position: fixed;
@@ -11,6 +12,7 @@
   padding: 10px 20px;
   border-radius: 6px;
   transition: opacity 0.5s ease-in-out;
+  font-size: 1.4rem;
 
   & button {
     display: flex;
@@ -36,9 +38,9 @@
 
 @media (max-width: 500px) {
   .wrapper {
-    width: 80%;
     top: 85%;
-    left: 50%;
-    padding: 10px ;
+    padding: 10px;
+    font-size: 1.2rem;
+    gap: 10px;
   }
 }
