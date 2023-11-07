@@ -10,7 +10,6 @@
   flex-direction: column;
   gap: 40px;
   width: 300px;
-  //height: 450px;
   padding: 20px;
   border-radius: 8px;
   background: rgb(26, 148, 213, 0.7);
@@ -32,7 +31,6 @@
     transition: .2s;
 
     &:hover {
-      //letter-spacing: 0.5px;
       color: #fff851;
       transition: .2s;
       border-radius: 4px;
@@ -162,9 +160,6 @@
     padding: 10px;
     gap: 20px;
   }
-  .rememberWrapper {
-    //margin-top: -10px;
-  }
   .email {
     width: 85%;
   }
@@ -180,7 +175,6 @@
   }
   .inputsBlock {
     justify-content: flex-start;
-    //gap: 15px;
   }
   .error {
     font-size: 0.7rem;

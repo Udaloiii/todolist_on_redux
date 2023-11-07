@@ -111,12 +111,6 @@ export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
                 dispatch(appStatusAC("idle"))
                 dispatch(addTodolistAC(res.data.data.item))
             } else {
-                // if (res.data.messages.length) {
-                //     dispatch(appErrorAC(res.data.messages[0]))
-                // } else {
-                //     dispatch(appErrorAC("Some error"))
-                // }
-                // dispatch(appStatusAC("failed"))
                 handleAppError(res.data, dispatch)
             }
         })
@@ -153,8 +147,6 @@ export const changeTodolistTitleTC = (todoId: string, newTitle: string) => (disp
             }
         })
         .catch(err => {
-            // dispatch(appStatusAC("failed"))
-            // dispatch(appErrorAC(err.message))
             handleServerError(err, dispatch)
         })
 }

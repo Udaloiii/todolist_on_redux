@@ -16,20 +16,17 @@
   border-radius: 4px;
   transition: .2s;
 
-  //background-color: #1a499d;
   text-decoration: none;
   color: #FFDAAF;
   font-size: 2rem;
   word-wrap: normal;
 
   &:hover {
-    //background-color: #2f6dde;
     text-decoration: underline;
     letter-spacing: 1px;
   }
 
   &:active {
-    //background-color: #2466dc;
     color: white;
     transition: .3s;
   }

@@ -100,14 +100,6 @@ export const taskApi = {
     removeTask(todolistId: string, taskId: string) {
         return instance.delete<MainResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
-
-    // changeTaskTitle(todolistId: string, taskId: string, newTitle: string) {
-    //     const body = {
-    //         title: newTitle
-    //     }
-    //     return instance.put<MainResponseType<{ item: TaskFromBack }>>(`todo-lists/${todolistId}/tasks/${taskId}`, body)
-    // }
-    // ,
     updateTask(taskId: string, domainModel: UpdateTaskType, todolistId: string) {
         return instance.put<MainResponseType<{
             item: TaskFromBack

@@ -36,7 +36,6 @@ export const Login = () => {
             return errors
         },
         onSubmit: (values) => {
-            // alert(JSON.stringify(values))
             dispatch(logInTC(values))
             formik.resetForm()
         }
@@ -61,15 +60,11 @@ export const Login = () => {
                 <form action="" onSubmit={formik.handleSubmit}>
                     <div className={style.inputsBlock}>
                         <input placeholder="email" className={style.email}
-                            // name="email"
-                            // value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur}
                                {...formik.getFieldProps("email")}/>
                         {formik.touched.email && formik.errors.email &&
                             <span className={style.error}>{formik.errors.email}</span>}
 
                         <input type="password" placeholder="password" className={style.password}
-                            // name="password"
-                            // value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur}
                                {...formik.getFieldProps("password")}/>
                         {formik.touched.password && formik.errors.password &&
                             <span className={style.error}>{formik.errors.password}</span>}

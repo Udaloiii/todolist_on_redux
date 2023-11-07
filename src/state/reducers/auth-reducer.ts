@@ -27,9 +27,6 @@ export const logInAC = (isLoggedIn: boolean) => {
     return {type: "LOG-IN", isLoggedIn} as const
 }
 
-// export const logOutAC = (isLoggedIn: boolean) => {
-//     return {type: "LOG-OUT", isLoggedIn} as const
-// }
 
 // thunks
 

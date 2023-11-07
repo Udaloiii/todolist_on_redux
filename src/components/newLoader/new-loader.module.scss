@@ -125,42 +125,34 @@
 }
 
 .dot2:nth-child(10) {
-  //animation-delay: 2.5s
   animation-delay: 2.4s;
 }
 
 .dot2:nth-child(9) {
-  //animation-delay: 2.75s
   animation-delay: 2.65s
 }
 
 .dot2:nth-child(8) {
-  //animation-delay: 3.0s
   animation-delay: 2.9s
 }
 
 .dot2:nth-child(7) {
-  //animation-delay: 3.25s
   animation-delay: 3.15s
 }
 
 .dot2:nth-child(6) {
-  //animation-delay: 3.5s
   animation-delay: 3.4s
 }
 
 .dot2:nth-child(5) {
-  //animation-delay: 3.75s
   animation-delay: 3.65s
 }
 
 .dot2:nth-child(4) {
-  //animation-delay: 4.0s
   animation-delay: 3.9s
 }
 
 .dot2:nth-child(3) {
-  //animation-delay: 4.2s
   animation-delay: 4.1s
 }
 
@@ -172,7 +164,6 @@
   animation-delay: 4.6s
 }
 
-/* #F44336;, #1E88E5, #FDD835; */
 @keyframes chomp1 {
   0% {
     transform: rotate(0deg);
@@ -270,7 +261,7 @@
   }
 }
 
-@media  screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .circle {
     position: relative;
     left: -100px;
